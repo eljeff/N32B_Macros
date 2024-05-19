@@ -258,7 +258,8 @@ void sendMidiMessage(uint8_t &index)
   if (isMidiChanged)
   {
 #ifndef N32Bv3
-    n32b_display.blinkDot(1);
+    // n32b_display.blinkDot(1);
+    n32b_display.printHexFromInt(MSB);
 #else
     n32b_display.showValue(MSB);
 #endif

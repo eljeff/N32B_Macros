@@ -35,10 +35,12 @@ public:
   void showValue(uint8_t);
   void blinkDot(uint8_t);
   void showChannelNumber(uint8_t);
+  void showMIDIVal(uint8_t ccVal);
   void showPresetNumber(uint8_t);
   void showStartUpAnimation();
   void factoryResetAnimation();
   void showSaveMessage();
+  void printHexFromInt(uint8_t intVal);
 
 private:
   unsigned long displayOffTimer;

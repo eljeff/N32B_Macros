@@ -8,8 +8,30 @@
 #include "display.h"
 
 #ifndef N32Bv3
-const static byte chars[] = {
-    B01111110, B00110000, B01101101, B01111001, B00110011, B01011011, B01011111, B01110000, B01111111, B01111011};
+const static byte chars[] = 
+{
+    B01111110, B00110000, B01101101, B01111001, B00110011, B01011011, B01011111, B01110000, B01111111, B01111011
+};
+
+const static byte hexes[] = 
+{
+    B01111110,  // 0
+    B00110000,  // 1
+    B01101101,  // 2
+    B01111001,  // 3
+    B00110011,  // 4
+    B01011011,  // 5
+    B01011111,  // 6
+    B01110000,  // 7
+    B01111111,  // 8
+    B01111011,  // 9
+    B01110111,  // A
+    B00011111,  // b
+    B01001110,  // C
+    B00111101,  // d
+    B01001111,  // E
+    B01000111   // F
+};
 #endif
 
 // Auto clear the display
@@ -70,6 +92,19 @@ void N32B_DISPLAY::showChannelNumber(uint8_t channelNumber)
 #ifndef N32Bv3
     clear();
     printDigit(channelNumber);
+#else
+    setNumber(channelNumber);
+    setDigit(2, MAX7219DIGIT(B01001110));
+    flush();
+#endif
+    displayOffTimer = millis();
+}
+
+void N32B_DISPLAY::showMIDIVal(uint8_t ccVal)
+{
+#ifndef N32Bv3
+    clear();
+    printHexFromInt(ccVal);
 #else
     setNumber(channelNumber);
     setDigit(2, MAX7219DIGIT(B01001110));
@@ -328,4 +363,17 @@ void N32B_DISPLAY::showSaveMessage()
         bDecimalPoint = !bDecimalPoint;
     }
 #endif
+}
+
+void N32B_DISPLAY::printHexFromInt(uint8_t intVal)
+{
+    clear();
+
+    uint8_t firstByte   = intVal >> 4;
+    uint8_t secondByte  = intVal & 0x0F;
+
+    write(1, hexes[secondByte]);
+    write(2, hexes[firstByte]);
+    
+    displayOffTimer = millis();
 }
